@@ -32,6 +32,23 @@ function App() {
       }
     })
     setPizzaList(updatedPizzaList)
+
+    fetch(`http://localhost:3001/pizzas/${pizzaObj.id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(pizzaObj)
+    })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Request failed')
+      }
+      return response.json();
+    })
+    .catch(error => {
+      console.error(error);
+    });
   
   }
 
