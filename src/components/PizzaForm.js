@@ -1,48 +1,34 @@
-import React, { useState, useEffect } from "react";
+import React, {useState, useEffect} from "react";
 
-function PizzaForm({
-  topping,
-  size,
-  vegetarian,
-  setTopping,
-  setSize,
-  setVegetarian,
-  editedPizza,
-  setPizzaList
-}) {
-  useEffect(() => {
+function PizzaForm({selectedPizza, handlePizzaChange}) {
+  const [pizzaId, setPizzaId] = useState(null);
+  const [topping, setTopping] = useState('')
+  const [size, setSize] = useState('')
+  const [vegetarian, setVegetarian] = useState(false)
   
+  console.log(selectedPizza)
+  
+  useEffect(() => {
+    setPizzaId(selectedPizza.id);
+    setTopping(selectedPizza.topping);
+    setSize(selectedPizza.size);
+    setVegetarian(selectedPizza.vegetarian)
+  }, [selectedPizza])
 
-  if (editedPizza) {
-    setTopping(editedPizza.topping);
-    setSize(editedPizza.size);
-    setVegetarian(editedPizza.vegetarian);
-  }
-}, [editedPizza, setTopping, setSize, setVegetarian, setPizzaList]);
-
-  function handleChange(event) {
-    const { name, value } = event.target;
-    if (name === "topping") {
-      setTopping(value);
-    } else if (name === "size") {
-      setSize(value);
-    } else if (name === "vegetarian") {
-      setVegetarian(value);
-    }
-  }
-
-  function submitForm(event) {
-    event.preventDefault();
-    const newPizza = {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const updatedPizza = {
+      id: pizzaId,
       topping: topping,
       size: size,
       vegetarian: vegetarian
-    };
-    editedPizza(newPizza)
+    }
+    handlePizzaChange(updatedPizza);
+    console.log(updatedPizza)
   }
 
   return (
-    <form onSubmit={submitForm}>
+    <form onSubmit={handleSubmit}>
       <div className="form-row">
         <div className="col-5">
           <input
@@ -50,16 +36,17 @@ function PizzaForm({
             type="text"
             name="topping"
             placeholder="Pizza Topping"
+            onChange={(e) => setTopping(e.target.value)}
             value={topping}
-            onChange={handleChange}
+
           />
         </div>
         <div className="col">
-          <select
-            className="form-control"
-            name="size"
-            value={size}
-            onChange={handleChange}
+          <select className="form-control" 
+          name="size" 
+          onChange={(e) => setSize(e.target.value)}
+          value={size}
+
           >
             <option value="Small">Small</option>
             <option value="Medium">Medium</option>
@@ -72,9 +59,9 @@ function PizzaForm({
               className="form-check-input"
               type="radio"
               name="vegetarian"
-              value="Vegetarian"
-              checked={vegetarian === "Vegetarian"}
-              onChange={handleChange}
+              onChange={(e) => setVegetarian(true)}
+              checked={vegetarian}
+
             />
             <label className="form-check-label">Vegetarian</label>
           </div>
@@ -83,9 +70,8 @@ function PizzaForm({
               className="form-check-input"
               type="radio"
               name="vegetarian"
-              value="Not Vegetarian"
-              checked={vegetarian === "Not Vegetarian"}
-              onChange={handleChange}
+              onChange={(e) => setVegetarian(false)}
+              checked={!vegetarian}
             />
             <label className="form-check-label">Not Vegetarian</label>
           </div>
@@ -101,7 +87,3 @@ function PizzaForm({
 }
 
 export default PizzaForm;
-
-
-
-

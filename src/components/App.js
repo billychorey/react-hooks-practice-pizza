@@ -5,10 +5,8 @@ import PizzaList from "./PizzaList";
 
 function App() {
    const [pizzaList, setPizzaList] = useState([]);
-   const [topping, setTopping] = useState('')
-   const [size, setSize] = useState('')
-   const [vegetarian, setVegetarian] = useState('')
-
+   const [selectedPizza, setSelectedPizza] = useState({})
+  
   useEffect(() => {
     async function fetchPizzas() {
       const response = await fetch('http://localhost:3001/pizzas')
@@ -18,42 +16,32 @@ function App() {
     fetchPizzas().then(pizzas => {
       setPizzaList(pizzas);
     });
-    
   }, []) 
 
-  function editPizza(pizza) {
-    console.log(pizza);
-    setTopping(pizza.topping);
-    setSize(pizza.size);
-    setVegetarian(pizza.vegetarian);
+  const selectPizza = (pizzaObj) => {
+    setSelectedPizza(pizzaObj);
   }
-
-
-  function editedPizza(newPizza) {
-    setPizzaList(prevPizzaList => {
-      const updatedPizzaList = prevPizzaList.map(pizza => {
-        if (pizza.id === newPizza.id) {
-          return newPizza;
-        }
+ 
+  const handlePizzaChange = (pizzaObj) => {
+    // console.log(pizzaObj)
+    const updatedPizzaList = [...pizzaList].map(pizza => {
+      if(pizza.id === pizzaObj.id) {
+        return pizzaObj;
+      } else {
         return pizza;
-      });
-      return updatedPizzaList;
-    });
+      }
+    })
+    setPizzaList(updatedPizzaList)
+  
   }
+
+
+  
   return (
     <>
       <Header />
-      <PizzaForm
-        topping={topping}
-        size={size}
-        vegetarian={vegetarian}
-        setTopping={setTopping}
-        setSize={setSize}
-        setVegetarian={setVegetarian}
-        editedPizza={editedPizza}
-        setPizzaList={setPizzaList}
-      />      
-      <PizzaList pizzaList={pizzaList} editPizza={editPizza} setPizzaList={setPizzaList}/>
+      <PizzaForm selectedPizza={selectedPizza} handlePizzaChange={handlePizzaChange}/>      
+      <PizzaList pizzaList={pizzaList} selectPizza={selectPizza}/>
     </>
   );
 }

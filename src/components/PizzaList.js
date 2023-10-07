@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import Pizza from "./Pizza";
 
-function PizzaList({pizzaList, editPizza, setPizzaList}) {
+function PizzaList({pizzaList, handleUpdateForm, selectPizza}) {
  
   return (
     <table className="table table-striped">
@@ -16,7 +16,7 @@ function PizzaList({pizzaList, editPizza, setPizzaList}) {
       <tbody>
         { pizzaList.map((pizza) => {
           return(
-            <Pizza {...pizza} key={pizza.id} pizza={pizza} editPizza={editPizza}/>
+            <Pizza {...pizza} key={pizza.id} pizza={pizza} selectPizza={selectPizza}/>
           )
         })
 
